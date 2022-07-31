@@ -1,6 +1,8 @@
 import express, { Application } from 'express'
 import log4js, { Log4js } from 'log4js'
 
+import ConfigEnv from '../config/config.env'
+
 import { homeRouter } from '../api/home/router'
 
 export class Server {
@@ -33,7 +35,7 @@ export class Server {
   }
 
   private config (): void {
-    this.port = (process.env.PORT != null ? process.env.PORT : 8080)
+    this.port = ConfigEnv.PORT ?? 8080
     this.log = log4js
     this.log.configure('./config/log4js.json')
     this.logger = this.log.getLogger('server')
