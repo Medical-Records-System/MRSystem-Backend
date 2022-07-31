@@ -15,7 +15,7 @@ export class Server {
 
   private static _instance: Server
 
-  constructor () {
+  private constructor () {
     this.app = express()
     this.routePrefix = '/api/1.0'
     this.config()
