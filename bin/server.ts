@@ -13,19 +13,23 @@ export class Server {
   private log!: Log4js
   private listen: any
 
-  private static singletonServer: Server
+  private static _instance: Server
 
   constructor () {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (Server.singletonServer) {
-      return Server.singletonServer
-    }
     this.app = express()
     this.routePrefix = '/api/1.0'
     this.config()
     this.middlewares()
     this.routes()
-    Server.singletonServer = this
+  }
+
+  static getInstance (): Server {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (this._instance) {
+      return this._instance
+    }
+    this._instance = new Server()
+    return this._instance
   }
 
   private config (): void {
@@ -45,9 +49,11 @@ export class Server {
   }
 
   start (): void {
-    this.listen = this.app.listen(this.port, () => {
-      this.logger.info(`[*] Server is running on port ${this.port}...`)
-    })
+    if (process.env.NODE_ENV !== 'test') {
+      this.listen = this.app.listen(this.port, () => {
+        this.logger.info(`[*] Server is running on port ${this.port}...`)
+      })
+    }
   }
 
   close (): void {
