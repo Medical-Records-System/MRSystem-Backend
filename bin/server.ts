@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 import log4js, { Log4js } from 'log4js'
 
 import ConfigEnv from '../config/config.env'
+import { getUri, connect } from '../services/mongoDb'
 
 import { homeRouter } from '../api/home/router'
 
@@ -14,15 +15,18 @@ export class Server {
   private port!: string | number
   private log!: Log4js
   private listen: any
+  private readonly uri: Promise<string>
 
   private static _instance: Server
 
   private constructor () {
+    this.uri = getUri()
     this.app = express()
     this.routePrefix = '/api/1.0'
     this.config()
     this.middlewares()
     this.routes()
+    void this.databaseConnection()
   }
 
   static getInstance (): Server {
@@ -48,6 +52,10 @@ export class Server {
 
   private routes (): void {
     this.app.use(`${this.routePrefix}/ping`, homeRouter)
+  }
+
+  private async databaseConnection (): Promise<void> {
+    await connect(this.uri)
   }
 
   start (): void {
