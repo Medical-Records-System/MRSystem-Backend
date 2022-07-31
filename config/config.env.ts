@@ -7,19 +7,22 @@ interface ENV {
   NODE_ENV: string | undefined
   PORT: number | undefined
   MONGO_URI: string | undefined
+  SECRETKEY: string | undefined
 }
 
 interface Config {
   NODE_ENV: string
   PORT: number
   MONGO_URI: string
+  SECRETKEY: string
 }
 
 const getConfig = (): ENV => {
   return {
     NODE_ENV: process.env.NODE_ENV,
     PORT: (process.env.PORT !== undefined) ? Number(process.env.PORT) : undefined,
-    MONGO_URI: process.env.MONGO_URI
+    MONGO_URI: process.env.MONGO_URI,
+    SECRETKEY: process.env.SECRET
   }
 }
 
