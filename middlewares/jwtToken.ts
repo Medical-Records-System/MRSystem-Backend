@@ -5,7 +5,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt'
 import ConfigEnv from '../config/config.env'
 import { routePrefix } from '../app'
 
-export class MiddlewareJson {
+export class MiddlewareJWT {
   init (): void {
     const opts = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('JWT'),

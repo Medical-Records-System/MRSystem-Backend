@@ -3,6 +3,7 @@ import log4js, { Log4js } from 'log4js'
 
 import ConfigEnv from '../config/config.env'
 import { MongoService } from '../services/mongoDb'
+import { MiddlewareJWT } from '../middlewares/jwtToken'
 
 import { homeRouter } from '../api/home/router'
 
@@ -14,6 +15,7 @@ export class Server {
 
   private port!: string | number
   private log!: Log4js
+  private middlewareJwtPassport!: MiddlewareJWT
   private listen: any
   private readonly mongoService: MongoService
 
@@ -41,6 +43,8 @@ export class Server {
   }
 
   private config (): void {
+    this.middlewareJwtPassport = new MiddlewareJWT()
+    this.middlewareJwtPassport.init()
     this.port = ConfigEnv.PORT ?? 8080
     this.log = log4js
     this.log.configure('./config/log4js.json')
@@ -50,6 +54,7 @@ export class Server {
   private middlewares (): void {
     this.app.use(express.json())
     this.app.use(express.urlencoded({ extended: false }))
+    this.app.use(this.middlewareJwtPassport.passportJwtMiddleware)
   }
 
   private routes (): void {
