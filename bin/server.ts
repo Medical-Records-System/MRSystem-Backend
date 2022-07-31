@@ -2,12 +2,12 @@ import express, { Application } from 'express'
 import log4js, { Log4js } from 'log4js'
 
 import ConfigEnv from '../config/config.env'
-import { getUri, connect } from '../services/mongoDb'
+import { MongoService } from '../services/mongoDb'
 
 import { homeRouter } from '../api/home/router'
 
 export class Server {
-  public logger!: any
+  private logger!: any
 
   readonly app!: Application
   readonly routePrefix!: string
@@ -15,21 +15,23 @@ export class Server {
   private port!: string | number
   private log!: Log4js
   private listen: any
-  private readonly uri: Promise<string>
+  private readonly mongoService: MongoService
 
   private static _instance: Server
 
   private constructor () {
-    this.uri = getUri()
+    this.mongoService = MongoService.getInstance
     this.app = express()
     this.routePrefix = '/api/1.0'
     this.config()
     this.middlewares()
     this.routes()
-    void this.databaseConnection()
+    void this.mongoService.getUri().then((res) => {
+      void this.databaseConnection(res)
+    })
   }
 
-  static getInstance (): Server {
+  static get getInstance (): Server {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (this._instance) {
       return this._instance
@@ -54,8 +56,8 @@ export class Server {
     this.app.use(`${this.routePrefix}/ping`, homeRouter)
   }
 
-  private async databaseConnection (): Promise<void> {
-    await connect(this.uri)
+  private async databaseConnection (uri: string): Promise<void> {
+    return await this.mongoService.connect(uri)
   }
 
   start (): void {
