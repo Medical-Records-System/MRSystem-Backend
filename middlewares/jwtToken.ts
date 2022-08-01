@@ -16,9 +16,14 @@ export class MiddlewareJWT {
     }))
   }
 
-  passportJwtMiddleware (req: Request, res: Response, next: NextFunction): NextFunction | PassportStatic {
-    if (req.url === `${routePrefix}/` || req.url === `${routePrefix}/auth/login`) {
-      return next
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  passportJwtMiddleware (req: Request, res: Response, next: NextFunction): void |PassportStatic {
+    const routesWithoutMiddleware = [
+      `${routePrefix}/ping`,
+      `${routePrefix}/auth/login`
+    ]
+    if (routesWithoutMiddleware.includes(req.url)) {
+      return next()
     }
     return passport.authenticate('jwt', { session: false })(req, res, next)
   }
