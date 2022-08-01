@@ -6,6 +6,7 @@ import { MongoService } from '../services/mongoDb'
 import { MiddlewareJWT } from '../middlewares/jwtToken'
 
 import { homeRouter } from '../api/home/router'
+import { authRouter } from '../api/auth/router'
 
 export class Server {
   private logger!: any
@@ -59,6 +60,7 @@ export class Server {
 
   private routes (): void {
     this.app.use(`${this.routePrefix}/ping`, homeRouter)
+    this.app.use(`${this.routePrefix}/auth`, authRouter)
   }
 
   private async databaseConnection (uri: string): Promise<void> {
