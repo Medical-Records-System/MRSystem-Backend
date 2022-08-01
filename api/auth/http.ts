@@ -4,6 +4,8 @@ import { sign } from 'jsonwebtoken'
 import ConfigEnv from '../../config/config.env'
 import { AuthController } from './controller'
 
+const authController = AuthController.getInstance
+
 export class AuthHttpHandler {
   private static _instance: AuthHttpHandler
 
@@ -17,7 +19,6 @@ export class AuthHttpHandler {
 
   async loginUser (req: Request, res: Response): Promise<Response> {
     try {
-      const authController = AuthController.getInstance
       const isValid = await authController.checkUserCredentials(req.body.email, req.body.password)
       if (!isValid) {
         return res.status(401).json({
