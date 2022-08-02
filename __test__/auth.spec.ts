@@ -8,7 +8,7 @@ jest.mock('../api/auth/service')
 
 beforeEach(async () => {
   const authController = AuthController.getInstance
-  await authController.registerUser('admin@admin.com', '1234')
+  await authController.registerUser({ firstName: 'Jean Carlos', lastName: 'Valencia', email: 'admin@admin.com', password: '1234' })
 })
 
 describe('AUTH CRUD WITH JWT TOKEN (FAILEDS)', () => {
@@ -32,7 +32,27 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       .set('Accept', 'application/json')
       .send({ email: 'admin@admin.com', password: '1234' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.data).toBeDefined()
+    expect(res.body.data).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/)
+  })
+  test('should return 200 and new user registered', async () => {
+    const newUser = {
+      firstName: 'Jean Carlos',
+      lastName: 'Valencia Barajas',
+      email: 'mrjunior127@gmail.com',
+      password: '12345'
+    }
+    const resRegister = await request(appServer)
+      .post(`${routePrefix}/auth/register`)
+      .set('Accept', 'application/json')
+      .send(newUser)
+    const resLogin = await request(appServer)
+      .post(`${routePrefix}/auth/login`)
+      .set('Accept', 'application/json')
+      .send({ email: newUser.email, password: newUser.password })
+    expect(resRegister.statusCode).toBe(201)
+    expect(resRegister.body.data).toMatchObject(newUser)
+    expect(resLogin.statusCode).toBe(200)
+    expect(resLogin.body.data).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/)
   })
 })
 
