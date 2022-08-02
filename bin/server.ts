@@ -29,14 +29,13 @@ export class Server {
     this.config()
     this.middlewares()
     this.routes()
-    void this.mongoService.getUri().then((res) => {
-      void this.databaseConnection(res)
+    this.mongoService.getUri().then((res) => {
+      this.databaseConnection(res)
     })
   }
 
   static get getInstance (): Server {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (this._instance) {
+    if (this._instance instanceof Server) {
       return this._instance
     }
     this._instance = new Server()

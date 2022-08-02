@@ -1,1 +1,1 @@
-export interface OptionsUris extends Record<string, string | string>{}
+export type OptionsUris = Record<string, string | string>

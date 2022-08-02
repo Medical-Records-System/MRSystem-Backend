@@ -25,7 +25,7 @@ export class AuthController {
     try {
       const hashedPwd = this.bcryptService.hashPasswordSync(password)
       const newUser = new AuthSchema({
-        email: email,
+        email,
         password: hashedPwd
       })
       await newUser.save()
@@ -37,7 +37,7 @@ export class AuthController {
 
   async getUserIdFromEmail (email: string): Promise<IAuth> {
     try {
-      const user = await AuthSchema.findOne({ email: email }).exec()
+      const user = await AuthSchema.findOne({ email }).exec()
       if (user === null) {
         throw new CodeError({
           code: 404,
@@ -52,7 +52,7 @@ export class AuthController {
 
   async getUserId (email: string): Promise<Types.ObjectId> {
     try {
-      const user = await AuthSchema.findOne({ email: email }).exec()
+      const user = await AuthSchema.findOne({ email }).exec()
       if (user === null) {
         throw new CodeError({
           code: 404,

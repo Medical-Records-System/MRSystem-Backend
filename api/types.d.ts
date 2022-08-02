@@ -1,4 +1,4 @@
 export interface CodeErrorHandling {
-  message: any
+  message: string
   code: number
 }
