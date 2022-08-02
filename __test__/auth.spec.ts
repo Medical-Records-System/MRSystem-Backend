@@ -23,6 +23,32 @@ describe('AUTH CRUD WITH JWT TOKEN (FAILEDS)', () => {
       .send()
     expect(res.statusCode).toBe(400)
   })
+  test('should return 401 when credentials is invalid', async () => {
+    const res = await request(appServer)
+      .post(`${routePrefix}/auth/login`)
+      .send({ email: 'admin@admin.com', password: '123' })
+    expect(res.statusCode).toBe(401)
+    expect(res.body.data.error).toContain('Invalid credentials')
+  })
+  test('should return 400 when no data is provided', async () => {
+    const errorRequiredFirstName = {
+      firstName: {
+        msg: 'The firstName is required'
+      }
+    }
+    const res = await request(appServer)
+      .post(`${routePrefix}/auth/register`)
+      .send()
+    expect(res.statusCode).toBe(400)
+    expect(res.body.data.errors).toMatchObject(errorRequiredFirstName)
+  })
+  test('should return 400 when user is already registered', async () => {
+    const res = await request(appServer)
+      .post(`${routePrefix}/auth/register`)
+      .send({ firstName: 'Jean Carlos', lastName: 'Valencia', email: 'admin@admin.com', password: '1234' })
+    expect(res.statusCode).toBe(400)
+    expect(res.body.data.error).toContain('User is already register')
+  })
 })
 
 describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
