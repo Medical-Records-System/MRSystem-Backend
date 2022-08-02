@@ -31,12 +31,7 @@ export class AuthHttpHandler {
       }
       const user = await authController.getUserId(req.body.email)
       const token = sign({ userId: user }, ConfigEnv.SECRETKEY, { expiresIn: '2h' })
-      await UserSchema.updateOne({ _id: user }, {
-        $set: {
-          token
-        }
-      },
-      { upsert: true }).exec()
+      await UserSchema.updateOne({ _id: user }, { $set: { token } }, { upsert: true }).exec()
       return res.status(200).json({
         ok: true,
         data: {
