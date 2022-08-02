@@ -32,7 +32,9 @@ export class AuthHttpHandler {
       const token = sign({ userId: user }, ConfigEnv.SECRETKEY, { expiresIn: '2h' })
       return res.status(200).json({
         ok: true,
-        data: token
+        data: {
+          token
+        }
       })
     } catch (error: any) {
       return res.status(error.code !== undefined ? error.code : 500).json({

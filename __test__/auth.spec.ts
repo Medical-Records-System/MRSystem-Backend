@@ -32,7 +32,7 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       .set('Accept', 'application/json')
       .send({ email: 'admin@admin.com', password: '1234' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.data).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/)
+    expect(res.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/)
   })
   test('should return 200 and new user registered', async () => {
     const newUser = {
@@ -52,7 +52,7 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
     expect(resRegister.statusCode).toBe(201)
     expect(resRegister.body.data).toMatchObject(newUser)
     expect(resLogin.statusCode).toBe(200)
-    expect(resLogin.body.data).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/)
+    expect(resLogin.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/)
   })
 })
 
