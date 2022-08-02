@@ -20,7 +20,8 @@ export class MiddlewareJWT {
   passportJwtMiddleware (req: Request, res: Response, next: NextFunction): void |PassportStatic {
     const routesWithoutMiddleware = [
       `${routePrefix}/ping`,
-      `${routePrefix}/auth/login`
+      `${routePrefix}/auth/login`,
+      `${routePrefix}/auth/register`
     ]
     if (routesWithoutMiddleware.includes(req.url)) {
       return next()
