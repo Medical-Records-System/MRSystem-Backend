@@ -1,5 +1,5 @@
 import express, { Application } from 'express'
-import log4js, { Log4js } from 'log4js'
+import log4js, { Log4js, Logger } from 'log4js'
 
 import ConfigEnv from '../config/config.env'
 import { MongoService } from '../services/mongoDb'
@@ -7,9 +7,10 @@ import { MiddlewareJWT } from '../middlewares/jwtToken'
 
 import { homeRouter } from '../api/home/router'
 import { authRouter } from '../api/auth/router'
+import { swaggerDocs } from '../config/swagger'
 
 export class Server {
-  private logger!: any
+  public logger!: Logger
 
   readonly app!: Application
   readonly routePrefix!: string
@@ -71,6 +72,7 @@ export class Server {
       this.listen = this.app.listen(this.port, () => {
         this.logger.info(`[*] Server is running on port ${this.port}...`)
       })
+      swaggerDocs(this.app, this.port)
     }
   }
 

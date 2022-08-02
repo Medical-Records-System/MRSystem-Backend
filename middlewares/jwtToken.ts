@@ -21,7 +21,14 @@ export class MiddlewareJWT {
     const routesWithoutMiddleware = [
       `${routePrefix}/ping`,
       `${routePrefix}/auth/login`,
-      `${routePrefix}/auth/register`
+      `${routePrefix}/auth/register`,
+      `${routePrefix}/docs/`,
+      `${routePrefix}/docs/swagger-ui.css`,
+      `${routePrefix}/docs/swagger-ui-bundle.js`,
+      `${routePrefix}/docs/swagger-ui-standalone-preset.js`,
+      `${routePrefix}/docs/swagger-ui-init.js`,
+      `${routePrefix}/docs/swagger-ui-standalone-preset.js`,
+      `${routePrefix}/docs/favicon-16x16.png`
     ]
     if (routesWithoutMiddleware.includes(req.url)) {
       return next()
