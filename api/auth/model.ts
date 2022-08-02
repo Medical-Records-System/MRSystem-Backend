@@ -1,9 +1,12 @@
 import { Schema, model } from 'mongoose'
-import { IAuth } from './types'
+import { IUser } from './types'
 
-const authSchema = new Schema({
+const userSchema = new Schema({
+  firstName: String,
+  lastName: String,
   email: String,
-  password: String
-})
+  password: String,
+  token: String
+}, { timestamps: true })
 
-export const AuthSchema = model<IAuth>('Auth', authSchema)
+export const UserSchema = model<IUser>('Users', userSchema)
