@@ -8,7 +8,9 @@ export const validateFields = (req: Request, res: Response, next: NextFunction):
   if (!result.isEmpty()) {
     return res.status(400).json({
       ok: false,
-      errors: result.mapped()
+      data: {
+        errors: result.mapped()
+      }
     })
   }
   return next()
