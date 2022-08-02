@@ -52,7 +52,7 @@ export class AuthHttpHandler {
     try {
       const { firstName, lastName, email, password } = req.body
       const canRegistered = await authController.registerUser({ firstName, lastName, email, password })
-      if (!canRegistered) {
+      if (canRegistered === false) {
         return res.status(400).json({
           ok: false,
           data: {

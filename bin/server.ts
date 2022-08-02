@@ -29,8 +29,8 @@ export class Server {
     this.config()
     this.middlewares()
     this.routes()
-    this.mongoService.getUri().then((res) => {
-      this.databaseConnection(res)
+    void this.mongoService.getUri().then((res) => {
+      void this.databaseConnection(res)
     })
   }
 
