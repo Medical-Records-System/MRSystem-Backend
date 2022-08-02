@@ -1,12 +1,17 @@
 import { Types, Document } from 'mongoose'
 
-export interface IAuth extends Document {
+export interface IUser extends Document {
   _id: Types.ObjectId
+  firstName: string
+  lastName: string
   email: string
   password: string
+  token: string
 }
 
 export interface INewUser {
-  email: IAuth['email']
-  password: IAuth['password']
+  firstName: IUser['firstName']
+  lastName: IUser['lastName']
+  email: IUser['email']
+  password: IUser['password']
 }
