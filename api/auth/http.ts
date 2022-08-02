@@ -29,7 +29,7 @@ export class AuthHttpHandler {
         })
       }
       const user = await authController.getUserId(req.body.email)
-      const token = sign({ userId: user }, ConfigEnv.SECRETKEY)
+      const token = sign({ userId: user }, ConfigEnv.SECRETKEY, { expiresIn: '2h' })
       return res.status(200).json({
         ok: true,
         data: token
