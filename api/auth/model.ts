@@ -22,7 +22,7 @@ import { IUser } from './types'
  *           example: mrjunior127@gmail.com
  *         password:
  *           type: string
- *           example: 1234
+ *           example: $2b$10$Ivon4lEEn4qV4UTfRioTref73UfbFlqScVkgjjtJp7h7Kn3YKwee6
  *         createdAt:
  *           type: string
  *           example: 2022-08-02T22:25:30.120+00:00
@@ -37,6 +37,6 @@ const userSchema = new Schema({
   email: String,
   password: String,
   token: String
-}, { timestamps: true })
+}, { timestamps: true, versionKey: false })
 
 export const UserSchema = model<IUser>('Users', userSchema)

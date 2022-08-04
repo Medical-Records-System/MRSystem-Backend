@@ -36,7 +36,7 @@ export class AuthController {
         password: hashedPwd
       })
       await saveUser.save()
-      return newUser
+      return saveUser
     } catch (error: any) {
       throw new CodeError(error)
     }
