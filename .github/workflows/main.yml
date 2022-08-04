@@ -71,5 +71,7 @@ jobs:
           file_name: .env.development.local
       - name: Install dependencies
         run: npm ci
+      - name: Echo pwd
+        run: pwd
       - name: Test
         run: npm run test
