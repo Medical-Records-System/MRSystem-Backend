@@ -9,13 +9,25 @@ const version: string = packagejson.version
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: '3.0.3',
     info: {
       title: 'Medical Records System Api', version: version
+    },
+    components: {
+      securitySchemes: {
+        Authorization: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          in: 'header',
+          value: 'JWT <JWT token here>'
+        }
+      }
     }
+
   },
   apis: [
-    './api/auth/router.ts'
+    './api/auth/router.ts', './api/auth/model.ts'
   ]
 }
 
