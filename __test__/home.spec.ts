@@ -1,6 +1,7 @@
 import request from 'supertest'
 
-import { appServer, server, routePrefix } from '../app'
+import { appServer, routePrefix } from '../app'
+import { MongoService } from '../services/mongoDb'
 
 describe(`GET ${routePrefix}/ping`, () => {
   test('should return 200 and text pong', async () => {
@@ -11,6 +12,7 @@ describe(`GET ${routePrefix}/ping`, () => {
   })
 })
 
-afterAll(() => {
-  server.close()
+afterAll(async () => {
+  const mongoService = MongoService.getInstance
+  await mongoService.disconnnect()
 })
