@@ -33,7 +33,7 @@ describe('AUTH CRUD WITH JWT TOKEN (FAILEDS)', () => {
   test('should return 400 when no data is provided', async () => {
     const errorRequiredFirstName = {
       firstName: {
-        msg: 'The firstName is required'
+        msg: 'The first name is required'
       }
     }
     const res = await request(appServer)
@@ -45,7 +45,7 @@ describe('AUTH CRUD WITH JWT TOKEN (FAILEDS)', () => {
   test('should return 400 when user is already registered', async () => {
     const res = await request(appServer)
       .post(`${routePrefix}/auth/register`)
-      .send({ firstName: 'Jean Carlos', lastName: 'Valencia', email: 'admin@admin.com', password: '1234' })
+      .send({ firstName: 'Jean Carlos', lastName: 'Valencia', email: 'admin@admin.com', password: '1234', confirmPassword: '1234' })
     expect(res.statusCode).toBe(400)
     expect(res.body.data.error).toContain('User is already register')
   })
@@ -65,7 +65,13 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       firstName: 'Jean Carlos',
       lastName: 'Valencia Barajas',
       email: 'mrjunior127@gmail.com',
-      password: '12345'
+      password: '12345',
+      confirmPassword: '12345'
+    }
+    const responseExpectedRegister = {
+      firstName: 'Jean Carlos',
+      lastName: 'Valencia Barajas',
+      email: 'mrjunior127@gmail.com'
     }
     const resRegister = await request(appServer)
       .post(`${routePrefix}/auth/register`)
@@ -75,8 +81,9 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       .post(`${routePrefix}/auth/login`)
       .set('Accept', 'application/json')
       .send({ email: newUser.email, password: newUser.password })
+    console.log(resRegister.body.data)
     expect(resRegister.statusCode).toBe(201)
-    expect(resRegister.body.data).toMatchObject(newUser)
+    expect(resRegister.body.data).toMatchObject(responseExpectedRegister)
     expect(resLogin.statusCode).toBe(200)
     expect(resLogin.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*)/)
   })
