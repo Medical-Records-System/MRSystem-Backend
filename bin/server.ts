@@ -1,4 +1,5 @@
 import express, { Application } from 'express'
+import cors from 'cors'
 import log4js, { Log4js, Logger } from 'log4js'
 
 import ConfigEnv from '../config/config.env'
@@ -55,6 +56,7 @@ export class Server {
   private middlewares (): void {
     this.app.use(express.json())
     this.app.use(express.urlencoded({ extended: false }))
+    this.app.use(cors())
     this.app.use(this.middlewareJwtPassport.passportJwtMiddleware)
   }
 
