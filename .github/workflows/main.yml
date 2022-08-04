@@ -62,6 +62,13 @@ jobs:
         with:
           cache: 'npm'
           node-version: 17
+      - uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_PORT: ${{ secrets.PORT }}
+          envkey_MONGO_URI: ${{ secrets.MONGO_URI }}
+          envkey_SECRETKEY: ${{ secrets.SECRETKEY }}
+          envkey_SALTROUND: ${{ secrets.SALTROUNDS }}
+          file_name: .env.development.local
       - name: Install dependencies
         run: npm ci
       - name: Test
