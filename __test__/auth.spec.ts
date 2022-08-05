@@ -6,6 +6,8 @@ import { MongoService } from '../services/mongoDb'
 
 jest.mock('../api/auth/service')
 
+let token: string = ''
+
 beforeEach(async () => {
   const authController = AuthController.getInstance
   await authController.registerUser({ firstName: 'Jean Carlos', lastName: 'Valencia', email: 'admin@admin.com', password: '1234' })
@@ -57,6 +59,7 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       .post(`${routePrefix}/auth/login`)
       .set('Accept', 'application/json')
       .send({ email: 'admin@admin.com', password: '1234' })
+    console.log(res.body.data)
     expect(res.statusCode).toBe(200)
     expect(res.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*)/)
   })
@@ -81,11 +84,18 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       .post(`${routePrefix}/auth/login`)
       .set('Accept', 'application/json')
       .send({ email: newUser.email, password: newUser.password })
-    console.log(resRegister.body.data)
     expect(resRegister.statusCode).toBe(201)
     expect(resRegister.body.data).toMatchObject(responseExpectedRegister)
     expect(resLogin.statusCode).toBe(200)
     expect(resLogin.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*)/)
+    token = resLogin.body.data.token
+  })
+  test('should return 200 and token restoring from database', async () => {
+    const resLogin = await request(appServer)
+      .post(`${routePrefix}/auth/login`)
+      .send({ email: 'mrjunior127@gmail.com', password: '12345' })
+    expect(resLogin.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*)/)
+    expect(resLogin.body.data.token).toContain(token)
   })
 })
 
