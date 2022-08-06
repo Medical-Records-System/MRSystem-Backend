@@ -1,8 +1,9 @@
+import { Types } from 'mongoose'
+import { decode, JwtPayload } from 'jsonwebtoken'
 import { BcryptService } from '../../services/bcrypt'
 import { UserSchema } from './model'
 import { CodeError } from '../exception'
 import { INewUser, IUser } from './types'
-import { Types } from 'mongoose'
 
 export class AuthController {
   private readonly bcryptService: BcryptService
@@ -91,5 +92,19 @@ export class AuthController {
     } catch (error: any) {
       throw new CodeError(error)
     }
+  }
+
+  isExpiredToken (token: string): boolean {
+    if (token !== undefined) {
+      const tokenDecode = decode(token, { complete: true })
+      const payload: JwtPayload = tokenDecode?.payload as JwtPayload
+      const expiration: number = payload.exp as number
+      const now = Math.floor(Date.now() / 1000)
+      if (now >= expiration) {
+        return true
+      }
+      return false
+    }
+    return true
   }
 }
