@@ -29,9 +29,19 @@ export class AuthHttpHandler {
           }
         })
       }
-      const user = await authController.getUserId(req.body.email)
-      const token = sign({ userId: user }, ConfigEnv.SECRETKEY, { expiresIn: '8h' })
-      await UserSchema.updateOne({ _id: user }, { $set: { token } }, { upsert: true }).exec()
+      const userId = await authController.getUserId(req.body.email)
+      const { token } = await authController.getUserIdFromEmail(req.body.email)
+      const isExpired = authController.isExpiredToken(token)
+      if (isExpired) {
+        const tokenCreate = sign({ userId: userId }, ConfigEnv.SECRETKEY, { expiresIn: '8h' })
+        await UserSchema.updateOne({ _id: userId }, { $set: { token } }, { upsert: true }).exec()
+        return res.status(200).json({
+          ok: true,
+          data: {
+            token: tokenCreate
+          }
+        })
+      }
       return res.status(200).json({
         ok: true,
         data: {
