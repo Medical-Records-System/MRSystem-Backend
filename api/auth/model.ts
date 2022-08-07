@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Types } from 'mongoose'
 import { IUser, IRole } from './types'
 
 /**
@@ -36,7 +36,13 @@ const userSchema = new Schema({
   lastName: String,
   email: String,
   password: String,
-  token: String
+  token: String,
+  roles: [
+    {
+      type: Types.ObjectId,
+      ref: 'Role'
+    }
+  ]
 }, { timestamps: true, versionKey: false })
 
 const roleSchema = new Schema({
