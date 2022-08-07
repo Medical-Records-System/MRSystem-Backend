@@ -15,3 +15,12 @@ export interface INewUser {
   email: IUser['email']
   password: IUser['password']
 }
+
+export interface IRole extends Document {
+  _id: Types.ObjectId
+  name: string
+}
+
+export interface INewRole {
+  name: IRole['name']
+}
