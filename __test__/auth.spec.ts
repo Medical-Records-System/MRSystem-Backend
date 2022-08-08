@@ -1,6 +1,7 @@
 import request from 'supertest'
 
 import { appServer, routePrefix } from '../app'
+import { seederRoles } from '../api/auth/seeder'
 import { AuthController } from '../api/auth/controller'
 import { MongoService } from '../services/mongoDb'
 
@@ -9,8 +10,9 @@ jest.mock('../api/auth/service')
 let token: string = ''
 
 beforeEach(async () => {
+  await seederRoles()
   const authController = AuthController.getInstance
-  await authController.registerUser({ firstName: 'Jean Carlos', lastName: 'Valencia', email: 'admin@admin.com', password: '1234' })
+  await authController.registerUser({ firstName: 'Jean Carlos', lastName: 'Valencia', email: 'admin@admin.com', password: '1234', roles: ['admin'] })
 })
 
 describe('AUTH CRUD WITH JWT TOKEN (FAILEDS)', () => {
@@ -68,7 +70,8 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       lastName: 'Valencia Barajas',
       email: 'mrjunior127@gmail.com',
       password: '12345',
-      confirmPassword: '12345'
+      confirmPassword: '12345',
+      role: ['doctor']
     }
     const responseExpectedRegister = {
       firstName: 'Jean Carlos',
