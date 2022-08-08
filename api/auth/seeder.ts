@@ -25,4 +25,5 @@ export const seederRoles = async (): Promise<boolean> => {
       }
     })
   }
+  return true
 }
