@@ -59,7 +59,6 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
       .post(`${routePrefix}/auth/login`)
       .set('Accept', 'application/json')
       .send({ email: 'admin@admin.com', password: '1234' })
-    console.log(res.body.data)
     expect(res.statusCode).toBe(200)
     expect(res.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*)/)
   })
