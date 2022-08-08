@@ -60,8 +60,8 @@ export class AuthHttpHandler {
 
   async registerUser (req: Request, res: Response): Promise<Response> {
     try {
-      const { firstName, lastName, email, password } = req.body
-      const canRegistered = await authController.registerUser({ firstName, lastName, email, password })
+      const { firstName, lastName, email, password, roles } = req.body
+      const canRegistered = await authController.registerUser({ firstName, lastName, email, password, roles })
       if (canRegistered === false) {
         return res.status(400).json({
           ok: false,

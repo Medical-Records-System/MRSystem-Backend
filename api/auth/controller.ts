@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import { decode, JwtPayload } from 'jsonwebtoken'
 import { BcryptService } from '../../services/bcrypt'
-import { UserSchema } from './model'
+import { UserSchema, RoleSchema } from './model'
 import { CodeError } from '../exception'
 import { INewUser, IUser } from './types'
 
@@ -24,7 +24,7 @@ export class AuthController {
 
   async registerUser (newUser: INewUser): Promise<boolean | INewUser> {
     try {
-      const { firstName, lastName, email, password } = newUser
+      const { firstName, lastName, email, password, roles } = newUser
       const isEmailRegistered = await UserSchema.findOne({ email }).exec()
       if (isEmailRegistered !== null) {
         return false
@@ -36,6 +36,13 @@ export class AuthController {
         email,
         password: hashedPwd
       })
+      if (Array.isArray(roles) && roles.length !== 0) {
+        const foundRoles = await RoleSchema.find({ name: { $in: roles } })
+        saveUser.roles = foundRoles.map((role) => role._id)
+      } else {
+        const role = await RoleSchema.findOne({ name: 'patient' }).exec()
+        saveUser.roles = [role?._id] as Types.ObjectId[]
+      }
       await saveUser.save()
       return saveUser
     } catch (error: any) {

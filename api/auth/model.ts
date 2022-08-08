@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose'
-import { IUser } from './types'
+import { Schema, model, Types } from 'mongoose'
+import { IUser, IRole } from './types'
 
 /**
  * @openapi
@@ -36,7 +36,18 @@ const userSchema = new Schema({
   lastName: String,
   email: String,
   password: String,
-  token: String
+  token: String,
+  roles: [
+    {
+      type: Types.ObjectId,
+      ref: 'Role'
+    }
+  ]
 }, { timestamps: true, versionKey: false })
 
-export const UserSchema = model<IUser>('Users', userSchema)
+const roleSchema = new Schema({
+  name: String
+}, { versionKey: false })
+
+export const RoleSchema = model<IRole>('Role', roleSchema)
+export const UserSchema = model<IUser>('User', userSchema)
