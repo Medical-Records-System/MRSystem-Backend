@@ -6,6 +6,7 @@ export interface IUser extends Document {
   lastName: string
   email: string
   password: string
+  roles: Types.ObjectId[] | string[]
   token: string
 }
 
@@ -14,6 +15,7 @@ export interface INewUser {
   lastName: IUser['lastName']
   email: IUser['email']
   password: IUser['password']
+  roles: IUser['roles']
 }
 
 export interface IRole extends Document {
