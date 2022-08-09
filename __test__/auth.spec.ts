@@ -99,6 +99,19 @@ describe('AUTH CRUD WITH JWT TOKEN (SUCCESS)', () => {
     expect(resLogin.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*)/)
     expect(resLogin.body.data.token).toContain(token)
   })
+  test('should return 200 when role is admin', async () => {
+    const resLogin = await request(appServer)
+      .post(`${routePrefix}/auth/login`)
+      .send({ email: 'admin@admin.com', password: '1234' })
+    const token = resLogin.body.data.token as string
+    const responsePingAdmin = await request(appServer)
+      .get(`${routePrefix}/ping/admin`)
+      .set('Authorization', `JWT ${token}`)
+    console.log(responsePingAdmin.body)
+    expect(resLogin.body.data.token).toMatch(/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*)/)
+    expect(responsePingAdmin.statusCode).toBe(200)
+    expect(responsePingAdmin.body.message).toMatch('pong')
+  })
 })
 
 afterAll(async () => {
