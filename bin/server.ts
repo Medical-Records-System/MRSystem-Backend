@@ -45,7 +45,7 @@ export class Server {
   }
 
   private config (): void {
-    this.middlewareJwtPassport = new MiddlewareJWT()
+    this.middlewareJwtPassport = MiddlewareJWT.getInstance
     this.middlewareJwtPassport.init()
     this.port = ConfigEnv.PORT ?? 8080
     this.log = log4js
