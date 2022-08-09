@@ -65,7 +65,8 @@ export class MiddlewareJWT {
 
   async isSecretary (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
-      const { _id } = req.body
+      const token = req.headers.authorization?.split(' ')[1] as string
+      const _id = this.getIdFromToken(token)
       const user = await UserSchema.findById(_id)
       const roles = await RoleSchema.find({ _id: { $in: user?.roles } })
       for (let i = 0; i < roles.length; i++) {
@@ -91,7 +92,8 @@ export class MiddlewareJWT {
 
   async isDoctor (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     try {
-      const { _id } = req.body
+      const token = req.headers.authorization?.split(' ')[1] as string
+      const _id = this.getIdFromToken(token)
       const user = await UserSchema.findById(_id)
       const roles = await RoleSchema.find({ _id: { $in: user?.roles } })
       for (let i = 0; i < roles.length; i++) {
